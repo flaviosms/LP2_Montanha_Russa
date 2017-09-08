@@ -8,12 +8,17 @@
 #ifndef PASSAGEIRO_H_
 #define PASSAGEIRO_H_
 
+#include <atomic>
+#include <time.h>
+#include <stdlib.h>
+
 class Carro;
 class Parque;
 
 class Passageiro {
 public:
 	Passageiro(int id, Carro *c);
+	int vez;
 	virtual ~Passageiro();
 	void entraNoCarro();
 	void esperaVoltaAcabar();
@@ -25,6 +30,8 @@ public:
 private:
 	int id;
 	Carro *carro;
+	Parque *parque;
+
 };
 
 #endif /* PASSAGEIRO_H_ */
