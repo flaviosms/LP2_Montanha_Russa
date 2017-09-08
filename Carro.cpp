@@ -7,6 +7,7 @@
 
 #include "include/Carro.h"
 #include "include/Parque.h"
+#include "include/Passageiro.h"
 #include <stdlib.h>
 #include <atomic>
 
@@ -14,9 +15,10 @@
 
 const int Carro::CAPACIDADE = 5;
 
-Carro::Carro() {
+Carro::Carro(Parque *p) {
 	this->voltas = 0;
 	numPassageiros = ATOMIC_VAR_INIT(0); //Inicia a variavel Atomica
+	this->parque = p;
 }
 
 Carro::~Carro() {
@@ -25,9 +27,10 @@ Carro::~Carro() {
 void Carro::esperaEncher() {
 	while (Carro::numPassageiros < Carro::CAPACIDADE) {
 		bool proximo=true;
-		for(auto &tredi : tPassageiros){//conta até o final do vector de threads do parque(ver main.cpp)			
-			if(tredi.vez<=Carro::inicioFila){proximo=false;}//se alguma variavel vez for menor ou igual ao inicio da fila nao avança o inciodafila 
-		}
+		int i;
+		for(auto &tredi : parque->getPassageiros()){//conta até o final do vector de threads do parque(ver main.cpp)			
+ 			if(tredi->vez<Carro::inicioFila){proximo=false;}
+ 		}
 		if(proximo){
 			Carro::inicioFila++;
 		}

@@ -8,12 +8,12 @@
 using namespace std;
 
 int main() {
-	Parque parque;
-	Carro carro;
+    Parque parque;
+	Carro carro(&parque);
 	Passageiro *passageiros[10];
 
     for (int i = 0; i < 10; i++) {
-    	passageiros[i] = new Passageiro(i, &carro); //inicia construtor de objetos passageiro
+    	passageiros[i] = new Passageiro(i, &carro, &parque); //inicia construtor de objetos passageiro
     	parque.addPassageiro(passageiros[i]); // adiciona os passageiros ao parque
     }
 
@@ -32,6 +32,5 @@ int main() {
     for (int i = 0; i < 10; i++) {
     	delete passageiros[i];
     }
-
 	return 0;
 }

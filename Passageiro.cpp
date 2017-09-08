@@ -14,9 +14,10 @@
 
 #define MAX_NUM_VOLTAS 50
 
-Passageiro::Passageiro(int id, Carro *c) {
+Passageiro::Passageiro(int id, Carro *c, Parque *p) {
 	this->id = id;
 	this->carro = c;
+	this->parque = p;
 }
 
 
@@ -27,18 +28,19 @@ void Passageiro::entraNoCarro() {
 	// Protocolo de entrada o Algoritmo da Padaria
 	int max=0; //Valor maximo ou fim da fila
 	int i;
-	for(i=0;i<10;i++){//conta até o final do vector de passageiros do parque
-		if(passageiros[i]>max){ //se a vez de alguem que está esperando for maior que o maximo
-			max+=tred.vez;//o maximo passa a ser o maior mais 1
-		}
-	}
+	for(auto &tred : parque->getPassageiros()){//conta até o final do vector de threads do parque(ver main.cpp)
+ 		if(tred->vez>max){ //se a vez de alguem que está esperando for maior que o maximo
+ 			max+=tred->vez;//o maximo passa a ser o maior mais 1
+ 		}
+ 	}
 	vez=max; //passa o valor maximo para ser a vez do passageiro que chegou
 	while(!Carro::vazio){delay(100);} // espera o carrinho ficar vazio
 	iniciodafila:
-	if((vez==Carro::inicioFila) && (Carro::numPassageiros<(Carro->CAPACIDADE))){//ve se esta na vez se carro nao esta cheio
-		for(auto &tred : Parque->tPassageiros){//conta até o final do vector de threads do parque(ver main.cpp)
-			if(vez==tred.vez){ //ve se existe outra thread que tem a mesma vez
-				if((this->id)>tred.id){ //Caso tenha , testa para ver qual a maior id (nao se atrapalha com si mesma pois o operador é >)
+	if((vez==Carro::inicioFila) && (Carro::numPassageiros<(Carro::CAPACIDADE))){//ve se esta na vez se carro nao esta cheio
+		for(auto &tred : parque->getPassageiros()){//conta até o final do vector de threads do parque(ver main.cpp)
+			if(vez==tred->vez){ //ve se existe outra thread que tem a mesma vez
+				if((this->id)>tred->id){ //Caso tenha , testa para ver qual a maior id (nao se atrapalha com si mesma pois o operador é >)
+					delay(25);
 					goto iniciodafila; //Se o id for menor vai pro começo da fila
 				}
 			}

@@ -17,7 +17,7 @@ class Parque;
 
 class Passageiro {
 public:
-	Passageiro(int id, Carro *c);
+	Passageiro(int id, Carro *c, Parque *p);
 	int vez;
 	virtual ~Passageiro();
 	void entraNoCarro();

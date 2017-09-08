@@ -21,7 +21,7 @@ public:
 	static bool parado;
 	static bool vazio;
 
-	Carro();
+	Carro(Parque *);
 	virtual ~Carro();
 	void esperaEncher();
 	void daUmaVolta();
@@ -36,7 +36,7 @@ public:
 
 private:
 	int voltas;
-
+	Parque *parque;
 };
 
 #endif /* CARRO_H_ */
