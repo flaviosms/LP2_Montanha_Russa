@@ -13,10 +13,10 @@
 #define TEMPO_VOLTA 5000
 
 const int Carro::CAPACIDADE = 5;
-int Carro::numPassageiros = 0;
 
 Carro::Carro() {
 	this->voltas = 0;
+	numPassageiros = ATOMIC_VAR_INIT(0); //Inicia a variavel Atomica
 }
 
 Carro::~Carro() {
@@ -25,8 +25,8 @@ Carro::~Carro() {
 void Carro::esperaEncher() {
 	while (Carro::numPassageiros < Carro::CAPACIDADE) {
 		bool proximo=true;
-		for(auto &tredi : Parque->tPassageiros){//conta até o final do vector de threads do parque(ver main.cpp)			
-			if(tredi.vez<Carro::inicioFila){proximo=false;}
+		for(auto &tredi : tPassageiros){//conta até o final do vector de threads do parque(ver main.cpp)			
+			if(tredi.vez<=Carro::inicioFila){proximo=false;}//se alguma variavel vez for menor ou igual ao inicio da fila nao avança o inciodafila 
 		}
 		if(proximo){
 			Carro::inicioFila++;
@@ -38,12 +38,12 @@ void Carro::esperaEncher() {
 
 void Carro::daUmaVolta() {
 	parado = false;
-	sleep(TEMPO_VOLTA);
+	delay(TEMPO_VOLTA);
 	parado = true;
 }
 
 void Carro::esperaEsvaziar() {
-	while (Carro::numPassageiros > 0) { sleep(250); }
+	while (Carro::numPassageiros > 0) { delay(250); }
 	vazio = true;
 }
 
