@@ -34,9 +34,9 @@ void Passageiro::entraNoCarro() {
  		}
  	}
 	vez=max; //passa o valor maximo para ser a vez do passageiro que chegou
-	while(!Carro::vazio){delay(100);} // espera o carrinho ficar vazio
+	while(!carro->vazio){delay(100);} // espera o carrinho ficar vazio
 	iniciodafila:
-	if((vez==Carro::inicioFila) && (Carro::numPassageiros<(Carro::CAPACIDADE))){//ve se esta na vez se carro nao esta cheio
+	if((vez==carro->inicioFila) && (carro->numPassageiros<(Carro::CAPACIDADE))){//ve se esta na vez se carro nao esta cheio
 		for(auto &tred : parque->getPassageiros()){//conta até o final do vector de threads do parque(ver main.cpp)
 			if(vez==tred->vez){ //ve se existe outra thread que tem a mesma vez
 				if((this->id)>tred->id){ //Caso tenha , testa para ver qual a maior id (nao se atrapalha com si mesma pois o operador é >)
@@ -45,7 +45,7 @@ void Passageiro::entraNoCarro() {
 				}
 			}
 		}
-		std::atomic_fetch_add(&Carro::numPassageiros,1);//Incrementa o numero de passageiros no carro
+		std::atomic_fetch_add(&carro->numPassageiros,1);//Incrementa o numero de passageiros no carro
 	}
 	
 
@@ -53,12 +53,12 @@ void Passageiro::entraNoCarro() {
 }
 
 void Passageiro::esperaVoltaAcabar() {
-	while (!Carro::parado) { delay(100); } //espera ate o carro estar parado
+	while (!carro->parado) { delay(100); } //espera ate o carro estar parado
 }
 
 void Passageiro::saiDoCarro() {
-	if(Carro::numPassageiros > 0 && Carro::parado){ // Teste so pra ter certeza mesmo
-		std::atomic_fetch_add(&Carro::numPassageiros,-1); //Sai do carro
+	if(carro->numPassageiros > 0 && carro->parado){ // Teste so pra ter certeza mesmo
+		std::atomic_fetch_add(&carro->numPassageiros,-1); //Sai do carro
 	}
 	else{
 		std::cout<<"404 caiu do carrinho"<<std::endl;

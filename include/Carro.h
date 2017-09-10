@@ -16,12 +16,13 @@ class Parque;
 class Carro {
 public:
 	static const int CAPACIDADE;
-	static std::atomic<int> numPassageiros;
-	static int inicioFila; //conta o numero do inicio da fila
-	static bool parado;
-	static bool vazio;
+	std::atomic<int> numPassageiros;
+	int inicioFila; //conta o numero do inicio da fila
+	bool parado;
+	bool vazio;
 
 	Carro(Parque *);
+	Carro(const Carro& origin);
 	virtual ~Carro();
 	void esperaEncher();
 	void daUmaVolta();

@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <atomic>
 
-#define TEMPO_VOLTA 5000
+#define TEMPO_VOLTA 500
 
 const int Carro::CAPACIDADE = 5;
 
@@ -19,6 +19,13 @@ Carro::Carro(Parque *p) {
 	this->voltas = 0;
 	numPassageiros = ATOMIC_VAR_INIT(0); //Inicia a variavel Atomica
 	this->parque = p;
+	this->inicioFila=0;
+	this->parado=true;
+	this->vazio=true;
+}
+Carro::Carro(const Carro& origin)
+: numPassageiros(origin.numPassageiros.load())
+{
 }
 
 Carro::~Carro() {
