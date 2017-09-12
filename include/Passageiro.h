@@ -25,7 +25,6 @@ public:
 	void saiDoCarro();
 	void passeiaPeloParque();
 	bool parqueFechado();
-
 	void run();
 private:
 	int id;
