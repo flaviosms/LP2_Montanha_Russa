@@ -11,15 +11,17 @@
 #include <stdlib.h>
 #include <atomic>
 #include <iostream>
+#include <stdio.h>
 
-#define TEMPO_VOLTA 1000
+#define TEMPO_VOLTA 3000
 
 const int Carro::CAPACIDADE = 5;
 
-std::atomic<int> Carro::numPassageiros= ATOMIC_VAR_INIT(0);
+std::atomic<int> Carro::numPassageiros = ATOMIC_VAR_INIT(0);
 
 bool Carro::voltaAcabou = false;
 
+//int Carro::voltas=0;
 
 Carro::Carro(Parque *p) {
 	this->voltas = 0;
@@ -29,7 +31,7 @@ Carro::~Carro() {
 }
 
 void Carro::esperaEncher() {
-	while (Carro::numPassageiros < Carro::CAPACIDADE) {delay(1000);}
+	while (Carro::numPassageiros < Carro::CAPACIDADE && parque->numPessoas.load(std::memory_order_relaxed) > 0) {delay(1000);}
 }
 
 void Carro::daUmaVolta() {
@@ -39,23 +41,23 @@ void Carro::daUmaVolta() {
 }
 
 void Carro::esperaEsvaziar() {
-	while (this->numPassageiros > 0) {delay(1000);}
+	while (this->numPassageiros > 0 && parque->numPessoas.load(std::memory_order_relaxed) > 0) {delay(1000);}
 }
 
 int Carro::getNVoltas() {
-	return voltas;
+	//std::cout<<"\nTHIS:"<<voltas<<std::endl;
+	return this->voltas;
 }
 
 void Carro::run() {
-	while (parque->numPessoas > 0) {
+	while (parque->numPessoas.load(std::memory_order_relaxed) > 0) {
 		esperaEncher();
-		std::cout<<"Carro--Iniciando Volta:"<<voltas<<std::endl;
+		std::cout<<"\n"<<"Carro--Iniciando Volta:"<<voltas<<std::endl;
 		daUmaVolta();
-		std::cout<<"Carro--Terminei a Volta:"<<voltas<<std::endl;
+		std::cout<<"\n"<<"Carro--Terminei a Volta:"<<voltas<<std::endl;
 		esperaEsvaziar();
 		Carro::voltaAcabou = false;
-		voltas++;
-
+		this->voltas++;
 	}
 
 }

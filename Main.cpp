@@ -15,8 +15,8 @@ int main() {
     	passageiros[i] = new Passageiro(i, &carro, &parque); //inicia construtor de objetos passageiro
     	parque.addPassageiro(passageiros[i]); // adiciona os passageiros ao parque
     }
-    thread tCarro(carro); //inicia thead carro
-    vector<thread> tPassageiros; //inica um vector de thread de passageiros 
+    thread tCarro(&Carro::run,&carro); //inicia thead carro
+    vector<thread> tPassageiros; //inicia um vector de thread de passageiros 
     for (auto &p : parque.getPassageiros()){ //for ate tamanho do vector
      tPassageiros.push_back(thread(&Passageiro::run, p)); //inicia a thread do passageiro e joga no final do vector tPassageiros
     }

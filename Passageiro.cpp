@@ -23,6 +23,7 @@ Passageiro::Passageiro(int id, Carro *c, Parque *p) {
 
 Passageiro::~Passageiro() {
 }
+int Passageiro::continuar = 1;
 
 void Passageiro::entraNoCarro() {
 	// Protocolo de entrada o Algoritmo da Padaria
@@ -60,6 +61,7 @@ void Passageiro::passeiaPeloParque() {
 
 bool Passageiro::parqueFechado() {
 	if (carro->getNVoltas() < MAX_NUM_VOLTAS){
+		//fprintf(stderr, "\n Voltas %d",carro->getNVoltas());
 		return false;
 	}
 
@@ -69,14 +71,14 @@ bool Passageiro::parqueFechado() {
 void Passageiro::run() {
 	while (!parqueFechado()) {
 		entraNoCarro(); // protocolo de entrada
-		std::cout<<this->id<<"--Entrei no Carro"<<std::endl;
+		std::cout<<"\n"<<this->id<<"--Entrei no Carro"<<std::endl;
 		esperaVoltaAcabar();
 		saiDoCarro(); // protocolo de saida
-		std::cout<<this->id<<"--Sai do Carro"<<std::endl;
+		std::cout<<"\n"<<this->id<<"--Sai do Carro"<<std::endl;
 		passeiaPeloParque(); // secao nao critica
 	}
 
 	// decrementa o numero de pessoas no parque
-	parque->numPessoas--;
+	std::atomic_fetch_sub(&parque->numPessoas,1);;
 }
 

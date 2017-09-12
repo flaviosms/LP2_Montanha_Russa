@@ -27,6 +27,7 @@
 #endif 
 //----------------------------------------------------
 #include <vector>
+#include <atomic>
 
 class Passageiro;
 
@@ -34,7 +35,7 @@ using namespace std;
 
 class Parque {
 public:
-	static int numPessoas;
+  static std::atomic<int> numPessoas;
 
 	Parque();
 	virtual ~Parque();
