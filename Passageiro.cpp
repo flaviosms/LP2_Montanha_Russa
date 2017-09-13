@@ -45,7 +45,6 @@ void Passageiro::entraNoCarro() {
 	for(auto &tred : parque->getPassageiros()){//conta até o final do vector de threads do parque(ver main.cpp)
 		if(this->id!=tred->id){
 			while((tred->vez!=0 && ( this->vez > tred->vez || (vez == tred->vez && this->id > tred->id) ) ) || (carro->Carro::numPassageiros) >= (Carro::CAPACIDADE) || (carro->voltaAcabou)){
-
 				
 			}
 		}
@@ -63,7 +62,15 @@ void Passageiro::saiDoCarro() {
 }
 
 void Passageiro::passeiaPeloParque() {
-	delay(8000); ///dorme por um tempo randomico
+	//-----------------------------------------------
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> uni(0,9000); // guaranteed unbiased
+
+	auto random_integer = uni(rng);
+	//-----------------------------------------------
+	std::cout<<"\n"<<this->id<<"--Esperando"<<random_integer+1000<<"segundos"<<std::endl;
+	delay((random_integer)+1000); ///dorme por um tempo randomico
 }
 
 bool Passageiro::parqueFechado() {
@@ -89,8 +96,7 @@ void Passageiro::run() {
 
 	// decrementa o numero de pessoas no parque
 	std::atomic_fetch_sub(&parque->numPessoas,1);
-	delay(1000);
-	std::cout<<"\n"<<this->id<<"--Eu dei "<<pvoltas<<"voltas na montanha russa."<<std::endl;
+	std::cout<<"\n"<<this->id<<"--Eu dei "<<pvoltas<<" voltas na montanha russa."<<std::endl;
 
 }
 

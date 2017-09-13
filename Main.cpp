@@ -22,7 +22,7 @@ int main() {
     }
 
     tCarro.join();
-    cout<<"PASSOOUUUUU"<<endl;
+    cout<<"O Parque fechou com sucesso."<<endl;
     for (auto &th : tPassageiros){
      th.join();
     }

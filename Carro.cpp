@@ -31,7 +31,7 @@ Carro::~Carro() {
 }
 
 void Carro::esperaEncher() {
-	while (Carro::numPassageiros < Carro::CAPACIDADE && parque->numPessoas.load(std::memory_order_relaxed) > 0) {}
+	while (Carro::numPassageiros < Carro::CAPACIDADE && parque->numPessoas.load(std::memory_order_relaxed) > Carro::CAPACIDADE) {}
 }
 
 void Carro::daUmaVolta() {
@@ -41,7 +41,7 @@ void Carro::daUmaVolta() {
 }
 
 void Carro::esperaEsvaziar() {
-	while (this->numPassageiros > 0 && parque->numPessoas.load(std::memory_order_relaxed) > 0) {}
+	while (this->numPassageiros > 0) {}
 }
 
 int Carro::getNVoltas() {
