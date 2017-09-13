@@ -27,6 +27,7 @@ public:
 	void passeiaPeloParque();
 	bool parqueFechado();
 	void run();
+	int intRand(const int & min, const int & max);
 private:
 	int id;
 	Carro *carro;

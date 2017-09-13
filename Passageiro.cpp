@@ -11,6 +11,14 @@
 #include <atomic>
 #include <time.h>
 #include <iostream>
+#include <random>
+#include <thread>
+
+#if defined (_MSC_VER)  // Visual studio
+    #define thread_local __declspec( thread )
+#elif defined (__GCC__) // GCC
+    #define thread_local __thread
+#endif
 
 #define MAX_NUM_VOLTAS 5
 
@@ -55,8 +63,7 @@ void Passageiro::saiDoCarro() {
 }
 
 void Passageiro::passeiaPeloParque() {
-	srand(time(NULL));//randomiza a seed 
-	delay((rand()%10000)); ///dorme por um tempo randomico
+	delay(8000); ///dorme por um tempo randomico
 }
 
 bool Passageiro::parqueFechado() {
@@ -69,16 +76,28 @@ bool Passageiro::parqueFechado() {
 }
 
 void Passageiro::run() {
+	int pvoltas=0;
 	while (!parqueFechado()) {
 		entraNoCarro(); // protocolo de entrada
 		std::cout<<"\n"<<this->id<<"--Entrei no Carro"<<std::endl;
 		esperaVoltaAcabar();
+		pvoltas++;
 		saiDoCarro(); // protocolo de saida
 		std::cout<<"\n"<<this->id<<"--Sai do Carro"<<std::endl;
 		passeiaPeloParque(); // secao nao critica
 	}
 
 	// decrementa o numero de pessoas no parque
-	std::atomic_fetch_sub(&parque->numPessoas,1);;
+	std::atomic_fetch_sub(&parque->numPessoas,1);
+	delay(1000);
+	std::cout<<"\n"<<this->id<<"--Eu dei "<<pvoltas<<"voltas na montanha russa."<<std::endl;
+
 }
+
+int Passageiro::intRand(const int & min, const int & max) {
+    static thread_local std::mt19937 generator;
+    std::uniform_int_distribution<int> distribution(min,max);
+    return distribution(generator);
+}
+
 

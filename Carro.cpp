@@ -13,7 +13,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#define TEMPO_VOLTA 3000
+#define TEMPO_VOLTA 6000
 
 const int Carro::CAPACIDADE = 5;
 
@@ -31,7 +31,7 @@ Carro::~Carro() {
 }
 
 void Carro::esperaEncher() {
-	while (Carro::numPassageiros < Carro::CAPACIDADE && parque->numPessoas.load(std::memory_order_relaxed) > 0) {delay(1000);}
+	while (Carro::numPassageiros < Carro::CAPACIDADE && parque->numPessoas.load(std::memory_order_relaxed) > 0) {}
 }
 
 void Carro::daUmaVolta() {
@@ -41,7 +41,7 @@ void Carro::daUmaVolta() {
 }
 
 void Carro::esperaEsvaziar() {
-	while (this->numPassageiros > 0 && parque->numPessoas.load(std::memory_order_relaxed) > 0) {delay(1000);}
+	while (this->numPassageiros > 0 && parque->numPessoas.load(std::memory_order_relaxed) > 0) {}
 }
 
 int Carro::getNVoltas() {
@@ -52,6 +52,7 @@ int Carro::getNVoltas() {
 void Carro::run() {
 	while (parque->numPessoas.load(std::memory_order_relaxed) > 0) {
 		esperaEncher();
+		if(parque->numPessoas.load(std::memory_order_relaxed) <= 0){break;}
 		std::cout<<"\n"<<"Carro--Iniciando Volta:"<<voltas<<std::endl;
 		daUmaVolta();
 		std::cout<<"\n"<<"Carro--Terminei a Volta:"<<voltas<<std::endl;
